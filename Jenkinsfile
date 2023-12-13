@@ -35,5 +35,18 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Quality Gate Check') {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonarqube-token') {
+                        def qualityGate = waitForQualityGate()
+                        if (qualityGate.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+                        }
+                    }
+                }
+            }
+        }
+             
     }
 }
