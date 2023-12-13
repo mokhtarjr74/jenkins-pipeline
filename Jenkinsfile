@@ -2,7 +2,7 @@ pipeline {
     agent {label 'clone-agent'}
     tools {
         maven 'MAVEN3'
-        jdk 'java17
+        jdk 'java17'
     }
     stages {
         stage('CI') {
