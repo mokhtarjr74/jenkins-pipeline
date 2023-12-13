@@ -1,19 +1,23 @@
-Pipeline {
-    agent any
+pipeline {
+    agent {label 'clone-agent'}
     tools {
-        go 'go-1.17'
+        maven 'MAVEN3'
+        jdk 'java17
     }
-
-    environment{
-        GO111MODULE = 'on'
-    }
-
-    stages{
-        stage('test') {
+    stages {
+        stage('CI') {
             steps {
-                git 'https://github.com/AdminTurnedDevOps/go-webapp-sample.git'
-                sh 'go test ./...'
+                git branch: 'main', url: 'https://github.com/mokhtarjr74/jenkins-pipeline.git'
+            }
+            post {
+                success {
+                    echo 'CI success'
+            }
+                failure {
+                    echo 'CI failed'
             }
         }
+        }
+       
     }
 }
