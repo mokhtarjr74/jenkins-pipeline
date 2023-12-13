@@ -9,15 +9,6 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/mokhtarjr74/jenkins-pipeline.git'
             }
-            post {
-                success {
-                    echo 'CI success'
-            }
-                failure {
-                    echo 'CI failed'
-            }
         }
-        }
-       
     }
 }
