@@ -4,6 +4,12 @@ pipeline {
         maven 'MAVEN3'
         jdk 'java17'
     }
+    environment {
+        DOCKER_USERNAME = credentials('docker-token').username
+        DOCKER_PASSWORD = credentials('docker-token').password
+        DOCKER_IMAGE_NAME = 'demo-jenkins-maven'
+        Docker_IMAGE_TAG = "V1-${BUILD_NUMBER}"
+    }
     stages {
         stage("Cleanup Workspace"){
             steps {
@@ -44,6 +50,15 @@ pipeline {
                             error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
                         }
                     }
+                }
+            }
+        }
+        stage('build docker image') {
+            steps {
+                script {
+            sh "docker build -t ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:${Docker_IMAGE_TAG} ."
+            sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+            sh "docker push ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:${Docker_IMAGE_TAG}"
                 }
             }
         }
