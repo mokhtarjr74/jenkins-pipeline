@@ -1,9 +1,9 @@
-FROM maven:3.9.5-jdk-17 AS build
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean install
 
-FROM openjdk:17-jdk-alpine
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 COPY --from=build /app/target/demoapp.jar /apps/
 EXPOSE 8080
