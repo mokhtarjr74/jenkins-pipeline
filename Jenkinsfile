@@ -5,8 +5,8 @@ pipeline {
         jdk 'java17'
     }
     environment {
-        DOCKER_USERNAME = credentials('docker-token_USR')
-        DOCKER_PASSWORD = credentials('docker-token_PSW')
+        DOCKER_USERNAME = credentials('docker-token_USR').username
+        DOCKER_PASSWORD = credentials('docker-token_PSW').password
         DOCKER_IMAGE_NAME = 'demo-jenkins-maven'
         Docker_IMAGE_TAG = "V1-${BUILD_NUMBER}"
     }
