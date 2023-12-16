@@ -5,8 +5,7 @@ pipeline {
         jdk 'java17'
     }
     environment {
-        DOCKER_USERNAME = credentials('docker-token_USR').username
-        DOCKER_PASSWORD = credentials('docker-token_PSW').password
+        DOCKER_CREDENTIALS = credentials('docker-token')
         DOCKER_IMAGE_NAME = 'demo-jenkins-maven'
         Docker_IMAGE_TAG = "V1-${BUILD_NUMBER}"
     }
@@ -56,9 +55,9 @@ pipeline {
         stage('build docker image') {
             steps {
                 script {
-            sh "docker build -t ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:${Docker_IMAGE_TAG} ."
-            sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-            sh "docker push ${DOCKER_USERNAME}/${DOCKER_IMAGE_NAME}:${Docker_IMAGE_TAG}"
+            sh "docker build -t ${DOCKER_CREDENTIALS_USR}/${DOCKER_IMAGE_NAME}:${Docker_IMAGE_TAG} ."
+            sh "docker login -u $DOCKER_CREDENTIALS_USR -p $DOCKER_CREDENTIALS_PSW"
+            sh "docker push ${DOCKER_CREDENTIALS_USR}/${DOCKER_IMAGE_NAME}:${Docker_IMAGE_TAG}"
                 }
             }
         }
