@@ -1,4 +1,4 @@
-FROM maven:3.9.5-jdk-17-slim AS build
+FROM maven:3.9.5-jdk-17 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean install
