@@ -1,11 +1,11 @@
 pipeline {
-    agent {label 'clone-agent'}
+    agent {label 'docker-agent'}
     tools {
-        maven 'MAVEN3'
-        jdk 'java17'
+        maven 'maven-3.9.6'
+        jdk 'java-17'
     }
     environment {
-        DOCKER_CREDENTIALS = credentials('docker-token')
+        DOCKER_CREDENTIALS = credentials('dockerhub-token')
         DOCKER_IMAGE_NAME = 'demo-jenkins-maven'
         Docker_IMAGE_TAG = "V1-${BUILD_NUMBER}"
     }
@@ -34,7 +34,7 @@ pipeline {
         stage('sonarqube analysis') {
             steps {
                 script{
-                    withSonarQubeEnv(credentialsId: 'sonarqube-token'){
+                    withSonarQubeEnv(credentialsId: 'sonarqube'){
                     sh 'mvn sonar:sonar'
                 }
                 }
@@ -43,7 +43,7 @@ pipeline {
         stage('SonarQube Quality Gate Check') {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'sonarqube-token') {
+                    withSonarQubeEnv(credentialsId: 'sonarqube') {
                         def qualityGate = waitForQualityGate()
                         if (qualityGate.status != 'OK') {
                             error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
